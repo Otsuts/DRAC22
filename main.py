@@ -26,7 +26,7 @@ def train_kfold(device, model_origin, dataset, args):
     # train every model
     for model_number, (train_index, val_index) in enumerate(kf.split(dataset)):
         write_log(f'Start training model {model_number+1}', args)
-        write_log(f'learning_rate {args.lr} weight_decay{args.weight_decay}')
+        # write_log(f'learning_rate {args.lr} weight_decay{args.weight_decay}', args)
         # train model from scratch
         model = copy.deepcopy(model_origin)
         optimizer = torch.optim.AdamW(
@@ -126,8 +126,8 @@ def train_kfold(device, model_origin, dataset, args):
                 np.array(all_gt.cpu()), np.array(all_p.cpu()))
 
             valid_acc = acc_num / val_size
-            if valid_acc > best or kappa > 0.80 or valid_auc > 0.85:
-                best = valid_acc
+            if kappa + valid_acc>best:
+                best = valid_acc+kappa
                 best_epoch = epoch
                 if not os.path.exists('saved_models/k_fold'):
                     os.mkdir('saved_models/k_fold')
@@ -223,8 +223,8 @@ def train(device, logger, model, train_loader, val_loader, train_size, val_size,
             np.array(all_gt.cpu()), np.array(all_p.cpu()))
 
         valid_acc = acc_num / val_size
-        if valid_auc > best or kappa > 0.80 or valid_acc > 0.85:
-            best = valid_auc
+        if  kappa +valid_acc>best:
+            best = valid_acc+kappa
             best_epoch = ep
             if not os.path.exists('saved_models/args.model'):
                 os.mkdir('saved_models/args.model')
@@ -253,10 +253,17 @@ if __name__ == '__main__':
     }
     write_log(args.device, args)
     model = model_dict[args.model]().to(args.device)
+    img_size = 512
+    if args.model == 'vitb':
+        img_size = 384
+        
+    if args.model == 'clip':
+        img_size = 224
+    
     if args.task == 'tsk2':
-        dataset = TrainData('../sb/data', image_size=512, transform=args.transform)
+        dataset = TrainData('./data', image_size=img_size, transform=args.transform)
     else:
-        dataset = TrainData('./data3', image_size=512,
+        dataset = TrainData('../sb/data3', image_size=512,
                             transform=args.transform)
     if args.k_fold:
         train_kfold(

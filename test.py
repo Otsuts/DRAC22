@@ -14,10 +14,10 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 def test(test_loader, model_name):
     prediction, p1, p2, p3 = [], [], [], []
-    model = torch.load(model_name).to('cuda:2')
+    model = torch.load(model_name).to('cuda:0')
     print(f"model loaded from {model_name}")
     for i in test_loader:
-        X = torch.tensor(i).to('cuda:2')
+        X = torch.tensor(i).to('cuda:0')
         num = X.shape[0]
         y = model(X)
         if y.shape[1] == 3:
@@ -65,7 +65,7 @@ if __name__ == '__main__':
         dataset = TestData('./data', image_size=512)
     else:
         dataset = TestData('./data3', image_size=512)
-    dataset = TestData('./data3', image_size=384)
+    dataset = TestData('./data3', image_size=512)
     name = dataset.names()
     test_loader = DataLoader(dataset,
                              batch_size=2,
@@ -74,11 +74,11 @@ if __name__ == '__main__':
                              pin_memory=True)
 
     model_name_list = [
-        'saved_models/k_fold/MODEL1_base_tsk3_vitb_ckpt_52_with_acc_0.8583_kappa_0.8593103448275862.pth',
-        'saved_models/k_fold/MODEL2_base_tsk3_vitb_ckpt_47_with_acc_0.8500_kappa_0.8519939701247088.pth',
-        'saved_models/k_fold/MODEL3_base_tsk3_vitb_ckpt_75_with_acc_0.8667_kappa_0.8434442270058709.pth',
-        'saved_models/k_fold/MODEL4_base_tsk3_vitb_ckpt_12_with_acc_0.8417_kappa_0.8559514783927218.pth',
-        'saved_models/k_fold/MODEL5_base_tsk3_vitb_ckpt_87_with_acc_0.8167_kappa_0.75.pth'
+        'saved_models/k_fold/MODEL1_base_tsk2_nfnet_ckpt_46_with_acc_0.9227_kappa_0.8991478804875418.pth',
+        'saved_models/k_fold/MODEL2_base_tsk2_nfnet_ckpt_10_with_acc_0.9318_kappa_0.8717948717948718.pth',
+        'saved_models/k_fold/MODEL3_base_tsk2_nfnet_ckpt_47_with_acc_0.9227_kappa_0.8870090634441088.pth',
+        'saved_models/k_fold/MODEL4_base_tsk2_nfnet_ckpt_43_with_acc_0.9273_kappa_0.8876691345417411.pth',
+        'saved_models/k_fold/MODEL5_base_tsk2_nfnet_ckpt_23_with_acc_0.9227_kappa_0.8737446197991392.pth'
 
     ]
     # pre, p1, p2, p3 = test(
@@ -89,6 +89,6 @@ if __name__ == '__main__':
     for i in range(len(name)):
         list_res.append([name[i], pre[i], p1[i], p2[i], p3[i]])
     column_name = ['case', 'class', 'P0', 'P1', 'P2']
-    csv_name = f'./submit/tsk3.csv'
+    csv_name = f'./submit/beit_final.csv'
     df = pd.DataFrame(list_res, columns=column_name)
     df.to_csv(csv_name, index=None)

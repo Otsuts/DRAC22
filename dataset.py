@@ -11,7 +11,7 @@ import torchvision.transforms as transforms
 class TrainData(torch.utils.data.Dataset):
     def __init__(self, root_dir, image_size=640, transform=True):
         # super(SBDataset, self).__init__()
-        self.image_train_dir = os.path.join(root_dir, 'img/', 'all/')
+        self.image_train_dir = os.path.join(root_dir, 'img/', 'train/')
         self.gts_path = os.path.join(root_dir, 'gt', 'labels.csv')
         self.load_imgs(self.image_train_dir)
         # print(self.train_img_paths)
@@ -68,7 +68,8 @@ class TrainData(torch.utils.data.Dataset):
             self.gts.append(value)
             print(name, value)
             print(idx)
-            if idx>=893:
+            if idx>=808:
+            # if idx>=893:
                 assert name == self.train_img_paths[idx][-len('0000.png'):]
             else:
                 assert name == self.train_img_paths[idx][-len('000.png'):]
