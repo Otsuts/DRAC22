@@ -1,4 +1,4 @@
-# DRAC22
+# SBNet: Apply Supplementary Backup Training Data on K-fold Ensemble Convolution Network to Solve DRAC22 Challenge
 This repo covers Cola_SuperBin group's solution to the second task(image quality assessment) of DRAC 2022 Diabetic Retinopathy Analysis Challenge(DRAC).
 
 ## Dataset
