@@ -26,7 +26,7 @@ The dataset contains a training set consisting of 665 images and test set consis
 
 Our team Colar_Super_Bin **ranks 1st** on the leaderboard!
 
-![rank](D:\Github\DRAC22\fig\rank.png)
+![rank](fig/rank.png)
 
 
 
